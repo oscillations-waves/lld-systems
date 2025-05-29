@@ -62,22 +62,6 @@ func (e *Elevator) moveToFloor(dest int) {
 	fmt.Printf("Elevator %d arrived at floor %d\n", e.ID, e.CurrentFloor)
 }
 
-func findNearestElevator(elevators []*Elevator, source int) int {
-	minDist := 1 << 30
-	chosen := 0
-	for i, e := range elevators {
-		dist := e.CurrentFloor - source
-		if dist < 0 {
-			dist = -dist
-		}
-		if dist < minDist {
-			minDist = dist
-			chosen = i
-		}
-	}
-	return chosen
-}
-
 func main() {
 	var numElevators int
 	fmt.Print("Enter number of elevators: ")
