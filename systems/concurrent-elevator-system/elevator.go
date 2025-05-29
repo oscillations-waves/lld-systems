@@ -65,24 +65,48 @@ func (e *Elevator) moveToFloor(dest int) {
 func main() {
 	var numElevators int
 	fmt.Print("Enter number of elevators: ")
-	fmt.Scan(&numElevators)
+	_, err := fmt.Scan(&numElevators)
+	if err != nil || numElevators <= 0 {
+		fmt.Println("Error: Please enter a valid positive integer for number of elevators.")
+		return
+	}
 
 	var wg sync.WaitGroup
 	controller := NewElevatorController(numElevators, &wg)
 
 	var n int
 	fmt.Print("Enter number of requests: ")
-	fmt.Scan(&n)
+	_, err = fmt.Scan(&n)
+	if err != nil || n <= 0 {
+		fmt.Println("Error: Please enter a valid positive integer for number of requests.")
+		return
+	}
 	requests := make([]Request, n)
 	for i := 0; i < n; i++ {
 		var source, dest int
 		var dir string
 		fmt.Printf("Request %d - Enter source floor: ", i+1)
-		fmt.Scan(&source)
+		_, err = fmt.Scan(&source)
+		if err != nil {
+			fmt.Println("Error: Invalid input for source floor.")
+			return
+		}
 		fmt.Printf("Request %d - Enter destination floor: ", i+1)
-		fmt.Scan(&dest)
+		_, err = fmt.Scan(&dest)
+		if err != nil {
+			fmt.Println("Error: Invalid input for destination floor.")
+			return
+		}
 		fmt.Printf("Request %d - Enter direction (up/down): ", i+1)
-		fmt.Scan(&dir)
+		_, err = fmt.Scan(&dir)
+		if err != nil || (dir != "up" && dir != "down") {
+			fmt.Println("Error: Direction must be 'up' or 'down'.")
+			return
+		}
+		if source == dest {
+			fmt.Println("Error: Source and destination floors cannot be the same.")
+			return
+		}
 		var direction Direction
 		if dir == "up" {
 			direction = Up
